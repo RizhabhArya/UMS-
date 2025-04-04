@@ -39,7 +39,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
   if (existedUser) {
     console.log("HEllo there");
-    throw new ApiError(409, "User with email or username already exists!");
+    throw new ApiError(409, "Username or email already exists!");
   }
 
   console.log(req.files);
