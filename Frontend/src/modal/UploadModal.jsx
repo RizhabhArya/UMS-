@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
+import { useEffect } from "react";
 
 const UploadModal = ({
   show,
@@ -12,8 +13,21 @@ const UploadModal = ({
   handleUpload,
   selectedFiles,
   error,
+  isLoading,
 }) => {
   const [isEditingRepoLink, setIsEditingRepoLink] = useState(false);
+
+  useEffect(() => {
+    if (project) {
+      setRepositoryLink(project.repositoryLink || "");
+    }
+  }, [show, project]);
+
+  useEffect(() => {
+    if (!show) {
+      setIsEditingRepoLink(false);
+    }
+  }, [show]);
 
   if (!project) return null;
 
@@ -67,9 +81,9 @@ const UploadModal = ({
           </Form.Group>
         ) : (
           <div>
-            {project.repositoryLink ? (
-              <a href={project.repositoryLink} target="_blank" rel="noopener noreferrer">
-                {project.repositoryLink}
+            {repositoryLink ? (  //here
+              <a href={repositoryLink} target="_blank" rel="noopener noreferrer">
+                {repositoryLink}
               </a>
             ) : (
               <span className="text-muted">No repository link available</span>
@@ -87,10 +101,17 @@ const UploadModal = ({
           <Button
             variant="primary"
             onClick={handleUpload}
-            disabled={!selectedFiles || selectedFiles.length === 0}
+            disabled={isLoading && (!selectedFiles || selectedFiles.length === 0)}
             className="mt-2"
           >
-            Upload
+             {isLoading ? (
+    <>
+      <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+      Uploading...
+    </>
+  ) : (
+    "Upload Files"
+  )}
           </Button>
           {error && <div className="text-danger mt-2">{error}</div>}
         </Form.Group>

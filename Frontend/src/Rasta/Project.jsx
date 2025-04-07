@@ -25,13 +25,14 @@ const Projects = () => {
   const { user, fetchUserDetails } = useContext(UserContext);
   const { role } = useUserRole();
 
+  const [isLoading, setIsLoading] = useState(false);
   const [showMarksModal, setShowMarksModal] = useState(false);
   const [selectedType, setSelectedType] = useState("");
   const [showViewModal, setShowViewModal] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [currentProject, setCurrentProject] = useState(null);
-  const [selectedFiles, setSelectedFiles] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState([]);
   const [repositoryLink, setRepositoryLink] = useState("");
   const [error, setError] = useState(null);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
@@ -39,10 +40,15 @@ const Projects = () => {
   const [currentProjectTitle, setCurrentProjectTitle] = useState("");
 
   
+  const refreshData = async () => {
+    await fetchUserDetails();
+    const updated = await fetchProjects();
+    return updated;
+  };
+  
 
   useEffect(() => {
-    fetchUserDetails();
-    fetchProjects();
+    refreshData();
   }, []);
 
 
@@ -53,10 +59,13 @@ const Projects = () => {
           setError("Repository link cannot be empty.");
           return;
         }
-  
+
+        await uploadRepositoryLink(selectedProjectId, repositoryLink);
         // 🔹 Simulate API call (Replace with actual API request)
         console.log("Uploading repo link:", repositoryLink);
         alert("Repository link updated successfully!");
+        refreshData();
+        // setShowUploadModal(false);
   
         // Optionally update the project state if needed
       } catch (err) {
@@ -74,7 +83,22 @@ const Projects = () => {
         setError("Please select at least one file.");
         return;
       }
-  
+
+      setIsLoading(true);
+      
+      
+      const formData = new FormData();
+      selectedFiles.forEach((file) => formData.append("projectFiles", file));
+      await uploadProjectFiles(selectedProjectId, formData);
+      setIsLoading(false);
+      
+      const updatedProjects = await refreshData();
+      const updatedProject = updatedProjects?.find(p => p._id === selectedProjectId);
+      setCurrentProject(updatedProject);
+      
+      // setShowUploadModal(false);
+      refreshData();
+      
       console.log("Uploading files:", selectedFiles);
       alert("Files uploaded successfully!");
     };
@@ -220,16 +244,17 @@ const Projects = () => {
         project={currentProject}
       />
       <UploadModal
-  show={showUploadModal}
-  handleClose={() => setShowUploadModal(false)}
-  project={currentProject}
-  repositoryLink={repositoryLink}
-  setRepositoryLink={setRepositoryLink}
-  handleRepositoryUpload={handleRepositoryUpload}   // <-- This function needs to be defined
-  handleFileChange={handleFileChange}  // <-- This function needs to be defined
-  handleUpload={handleUpload} // <-- This function needs to be defined
-  selectedFiles={selectedFiles}
-  error={error}
+      show={showUploadModal}
+      handleClose={() => setShowUploadModal(false)}
+      project={currentProject}
+      repositoryLink={repositoryLink}
+      setRepositoryLink={setRepositoryLink}
+      handleRepositoryUpload={handleRepositoryUpload}   // <-- This function needs to be defined
+      handleFileChange={handleFileChange}  // <-- This function needs to be defined
+      handleUpload={handleUpload} // <-- This function needs to be defined
+      selectedFiles={selectedFiles}
+      error={error}
+      isLoading={isLoading}
 />
 
       <MarksModal
