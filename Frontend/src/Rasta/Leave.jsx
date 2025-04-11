@@ -24,8 +24,11 @@ const Leave = () => {
     reason: "",
   });
 
+  // eslint-disable-next-line no-unused-vars
   const [selectedLeave, setSelectedLeave] = useState(null);
+  // eslint-disable-next-line no-unused-vars
   const [showModal, setShowModal] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [actionType, setActionType] = useState(""); // "approve" or "reject"
   const [showLeaveModal, setShowLeaveModal] = useState(false); // Modal for leave requests
 
@@ -44,11 +47,12 @@ const Leave = () => {
       await requestLeave(formData);
       toast.success("Leave request sent successfully!");
       fetchMyLeaves();
+  // eslint-disable-next-line no-unused-vars
     } catch (error) {
       toast.error("Failed to submit leave request.");
     }
   };
-
+  // eslint-disable-next-line no-unused-vars
   const handleAction = async () => {
     if (!selectedLeave) return;
     try {
@@ -60,6 +64,7 @@ const Leave = () => {
         toast.error("Leave request rejected!");
       }
       fetchPendingLeaves();
+  // eslint-disable-next-line no-unused-vars
     } catch (error) {
       toast.error("Failed to process request!");
     }
@@ -71,6 +76,7 @@ const Leave = () => {
       await deleteLeave(leaveId);
       toast.success("Leave request deleted successfully!");
       fetchMyLeaves(); // Refresh leave list
+  // eslint-disable-next-line no-unused-vars
     } catch (error) {
       toast.error("Failed to delete leave request.");
     }

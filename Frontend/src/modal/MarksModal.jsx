@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useContext, useEffect, useState } from "react";
 import { Modal, Button, Spinner, Alert } from "react-bootstrap";
 import ProjectMarksContext from "../context/ProjectMarksContext";

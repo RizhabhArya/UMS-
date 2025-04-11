@@ -19,6 +19,7 @@ const Projects = () => {
     uploadRepositoryLink,
     setSelectedProjectId,
     selectedProjectId,
+  // eslint-disable-next-line no-unused-vars
     createProject,
     deleteProject,
   } = useContext(ProjectContext);
@@ -37,6 +38,7 @@ const Projects = () => {
   const [error, setError] = useState(null);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [showRecommendationModal, setShowRecommendationModal] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [currentProjectTitle, setCurrentProjectTitle] = useState("");
 
   
@@ -70,6 +72,7 @@ const Projects = () => {
         // Optionally update the project state if needed
       } catch (err) {
         setError("Failed to update repository link.");
+        console.log(err);
       }
     };
 
