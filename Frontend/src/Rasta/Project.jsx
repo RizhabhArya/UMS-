@@ -254,7 +254,7 @@ const Projects = () => {
       setRepositoryLink={setRepositoryLink}
       handleRepositoryUpload={handleRepositoryUpload}   // <-- This function needs to be defined
       handleFileChange={handleFileChange}  // <-- This function needs to be defined
-      handleUpload={handleUpload} // <-- This function needs to be defined
+      handleUpload={handleUpload} // <-- This function needs to be defined!
       selectedFiles={selectedFiles}
       error={error}
       isLoading={isLoading}
